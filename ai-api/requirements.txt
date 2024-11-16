@@ -1,0 +1,16 @@
+fastapi>=0.110.0
+hypercorn>=0.13.2
+uvicorn
+aiofiles>=0.8.0
+python-multipart>=0.0.7
+httpx>=0.22.0
+pydantic
+
+cdp-langchain
+langchain_openai
+langgraph
+langchain_core
+cdp-sdk
+poetry
+flask_cors
+python-dotenv
