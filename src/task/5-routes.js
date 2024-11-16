@@ -1,4 +1,6 @@
 import { namespaceWrapper, app } from "@_koii/namespace-wrapper";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Get the project root directory (assuming src is one level deep from root)
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,6 +21,6 @@ export function routes() {
   });
 
   app.get("/app", (req, res) => {
-    res.sendFile(path.join(projectRoot, 'src/client/main.html'));
+    res.sendFile(path.join(projectRoot, 'client/main.html'));
   });
 }
