@@ -2,6 +2,7 @@ import { namespaceWrapper, app } from "@_koii/namespace-wrapper";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
+import { findDocuments, insertDocuments } from "./deps/mongo.js";
 
 // Get the project root directory (assuming src is one level deep from root)
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -29,6 +30,7 @@ export function routes() {
 
   app.post("/api/login", async (req, res) => {
     try {
+      console.log("req.body", req.body);
       const { username } = req.body;
 
       // Validate username
@@ -36,22 +38,21 @@ export function routes() {
         return res.status(400).json({ error: "Invalid username" });
       }
 
-      // Check if user exists in NeoDB
-      const existingUser = await namespaceWrapper.storeGet(`user:${username}`);
+      // Check if user exists in MongoDB
+      const existingUsers = await findDocuments('users', { 
+        username: username.toLowerCase() 
+      });
+      const existingUser = existingUsers[0];
 
       if (!existingUser) {
         // Create new user
         const newUser = {
           username: username.toLowerCase(),
           createdAt: new Date().toISOString(),
-          // Add any other user properties you need
         };
 
-        // Store in NeoDB
-        await namespaceWrapper.storeSet(
-          `user:${username}`,
-          JSON.stringify(newUser),
-        );
+        // Store in MongoDB
+        await insertDocuments('users', newUser);
 
         return res.status(201).json({
           message: "User created successfully",
@@ -62,7 +63,7 @@ export function routes() {
       // Return existing user
       return res.status(200).json({
         message: "Login successful",
-        user: JSON.parse(existingUser),
+        user: existingUser,
       });
     } catch (error) {
       console.error("Login error:", error);

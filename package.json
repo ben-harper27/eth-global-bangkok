@@ -29,6 +29,7 @@
     "cross-spawn": "^7.0.3",
     "dotenv": "^16.3.0",
     "dotenv-webpack": "^8.1.0",
+    "mongodb": "^6.10.0",
     "nodemon": "^3.1.7",
     "tail": "^2.2.6"
   },
