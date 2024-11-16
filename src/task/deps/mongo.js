@@ -1,6 +1,6 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-const mongoPassword = "Z8Uf4LnnwBBrybbj";
+const mongoPassword = "Z8Uf4LnnwBBrybbj"; // TODO: Make this a proper secret
 const uri = `mongodb+srv://ben:${mongoPassword}@memenomicsai.njofc.mongodb.net/?retryWrites=true&w=majority&appName=MemenomicsAI`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
