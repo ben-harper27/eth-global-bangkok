@@ -3,6 +3,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
 import { findDocuments, insertDocuments } from "./deps/mongo.js";
+import { Wallet } from "@coinbase/coinbase-sdk";
+import coinbase from "./deps/coinbase.js";
+import { v4 as uuidv4 } from "uuid";
+import { storeSecret } from "./deps/nillion.js";
 
 // Get the project root directory (assuming src is one level deep from root)
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -57,8 +61,24 @@ export function routes() {
 
       if (!existingUser) {
         // Create new user
+        const uuid = uuidv4();
+        const wallet = await Wallet.create();
+        console.log('TEST', "wallet created");
+        console.log('TEST', "wallet", wallet);
+        const walletAddress = (await wallet.getDefaultAddress()).toString();
+        console.log('TEST', "wallet address", walletAddress);
+        const faucetTransaction = await wallet.faucet();
+        console.log('TEST', "faucet transaction", faucetTransaction);
+        await faucetTransaction.wait();
+        const data = wallet.export();
+        console.log('TEST', "wallet data", data);
+        const base64Data = Buffer.from(JSON.stringify(data)).toString('base64');
+        console.log('TEST', "base64Data", base64Data);
+        await storeSecret(uuid, "walletPrivateKey", base64Data);
         const newUser = {
+          id: uuid,
           username: username.toLowerCase(),
+          walletAddress,
           createdAt: new Date().toISOString(),
         };
 

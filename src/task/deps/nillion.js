@@ -3,26 +3,30 @@ const API_BASE = "https://nillion-storage-apis-v0.onrender.com";
 
 export async function storeSecret(userSeed, secretName, secretValue) {
   console.log(`\nStoring secret: ${secretName}...`);
-  const storeResult = await fetch(`${API_BASE}/api/apps/${APP_ID}/secrets`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      secret: {
-        nillion_seed: userSeed,
-        secret_value: secretValue,
-        secret_name: secretName,
-      },
-      permissions: {
-        retrieve: [],
-        update: [],
-        delete: [],
-        compute: {},
-      },
-    }),
-  }).then((res) => res.json());
-  
-  console.log(`Secret "${secretName}" stored at:`, storeResult);
-  return storeResult;
+  try {
+    const storeResult = await fetch(`${API_BASE}/api/apps/${APP_ID}/secrets`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: {
+          nillion_seed: userSeed,
+          secret_value: secretValue,
+          secret_name: secretName,
+        },
+        permissions: {
+          retrieve: [],
+          update: [],
+          delete: [],
+          compute: {},
+        },
+      }),
+    }).then((res) => res.json());
+
+    console.log(`Secret "${secretName}" stored at:`, storeResult);
+    return storeResult;
+  } catch (error) {
+    console.error("TEST", "error", error);
+  }
 }
 
 export async function getStoreIds() {
@@ -35,30 +39,35 @@ export async function getStoreIds() {
 export async function retrieveSecret(storeId, userSeed, secretName) {
   console.log(`\nRetrieving secret: ${secretName}...`);
   const secret = await fetch(
-    `${API_BASE}/api/secret/retrieve/${storeId}?retrieve_as_nillion_user_seed=${userSeed}&secret_name=${secretName}`
+    `${API_BASE}/api/secret/retrieve/${storeId}?retrieve_as_nillion_user_seed=${userSeed}&secret_name=${secretName}`,
   ).then((res) => res.json());
-  
+
   console.log(`Secret "${secretName}" retrieved:`, secret);
   return secret;
 }
 
-export async function updateSecret(storeId, userSeed, secretName, newSecretValue) {
+export async function updateSecret(
+  storeId,
+  userSeed,
+  secretName,
+  newSecretValue,
+) {
   console.log(`\nUpdating secret: ${secretName}...`);
   const updateResponse = await fetch(
     `${API_BASE}/api/apps/${APP_ID}/secrets/${storeId}`,
     {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         nillion_seed: userSeed,
         secret_value: newSecretValue,
-        secret_name: secretName
+        secret_name: secretName,
       }),
-    }
+    },
   ).then((res) => res.json());
-  
+
   console.log(`Secret "${secretName}" updated:`, updateResponse);
   return updateResponse;
 }

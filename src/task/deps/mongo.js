@@ -16,8 +16,7 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     console.log('TEST', 'connecting to mongo')
-    let result = await client.connect();
-    console.log('TEST', 'mongo resut', result)
+    await client.connect();
     // Send a ping to confirm a successful connection
     let connectionresult = await client.db("admin").command({ ping: 1 });
     console.log('TEST', 'mongo resut', connectionresult)
