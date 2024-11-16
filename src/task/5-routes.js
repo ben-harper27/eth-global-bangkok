@@ -28,6 +28,17 @@ export function routes() {
     res.sendFile(path.join(projectRoot, "client/main.html"));
   });
 
+  app.get('/debug/mongo', async (req, res) => {
+    try {
+      console.log('trying insert documents')
+      let result = await insertDocuments('users', { username: 'bob', createdAt: new Date().toISOString() });
+      console.log('inserted documents', result)
+    } catch (error) {
+      console.error("Error inserting document:", error);
+    }
+    res.status(200).json({ message: "MongoDB connected" });
+  });
+
   app.post("/api/login", async (req, res) => {
     try {
       console.log("req.body", req.body);
