@@ -9,7 +9,7 @@ const projectRoot = path.resolve(__dirname, "..");
 
 export function routes() {
   app.use(express.json());
-  app.use("/static", express.static(path.join(__dirname, "client")));
+  app.use("/static", express.static(path.join(projectRoot, "client")));
   /**
    *
    * Define all your custom routes here
