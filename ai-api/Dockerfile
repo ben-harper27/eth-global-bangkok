@@ -18,4 +18,4 @@ COPY . ./
 
 USER 1005
 
-ENTRYPOINT ["uvicorn", "api.main:app", "--loop", "asyncio", "--host", "0.0.0.0", "--workers", "5"]
+ENTRYPOINT ["uvicorn", "api.main:app", "--loop", "asyncio", "--host", "0.0.0.0", "--workers", "1"]

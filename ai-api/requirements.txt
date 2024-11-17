@@ -5,6 +5,7 @@ aiofiles>=0.8.0
 python-multipart>=0.0.7
 httpx>=0.22.0
 pydantic
+pydantic-settings
 
 cdp-langchain
 langchain_openai

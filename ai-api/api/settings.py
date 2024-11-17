@@ -1,7 +1,6 @@
 import logging
 import os
-
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -12,6 +11,7 @@ class Settings(BaseSettings):
 class SecureSettings(BaseSettings):
     coinbase_api_key: str = os.environ.get("COINBASE_API_KEY", "")
     coinbase_api_private_key: str = os.environ.get("COINBASE_API_PRIVATE_KEY", "")
+    open_api_key: str = os.environ.get("OPENAI_API_KEY", "")
 
 
 settings = Settings()

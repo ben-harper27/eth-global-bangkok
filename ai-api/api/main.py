@@ -29,9 +29,6 @@ origins = [
     "http://localhost:4242",
 ]
 
-if settings.cors_origins:
-    origins.extend(settings.cors_origins.split(","))
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
