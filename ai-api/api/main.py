@@ -22,16 +22,9 @@ app = FastAPI(
     openapi_url="/hidden/openapi.json"
 )
 
-origins = [
-    "http://localhost:8080",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://localhost:4242",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -48,7 +41,6 @@ def on_startup():
         indent=4,
         separators=(',', ': ')
     ))
-    log.info(f"Origins: {origins}")
     if settings.test_mode:
         log.info("Running in test mode")
         log.info(json.dumps(

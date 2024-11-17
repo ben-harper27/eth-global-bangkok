@@ -7,6 +7,8 @@ from cdp_langchain.utils import CdpAgentkitWrapper
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 from api.settings import secure_settings
+from pydantic import BaseModel
+
 log = logging.getLogger(__name__)
 router = APIRouter(
     prefix="/v1/agent",
@@ -54,6 +56,10 @@ async def ask_user_first_question():
     return "-------------------"
 
 
+class QuestionModel(BaseModel):
+    question: str
+
+
 def ask_agent(question: str):
     for chunk in agent_executor.stream(
         {"messages": [HumanMessage(content=question)]},
@@ -67,5 +73,5 @@ def ask_agent(question: str):
 
 
 @router.post("/")
-async def agent(user_input: str):
-    return ask_agent(user_input)
+async def agent(request: QuestionModel):
+    return ask_agent(request.question)
