@@ -40,20 +40,23 @@ tools = toolkit.get_tools()
 llm = ChatOpenAI(model="gpt-4o-mini")
 
 # Create an agent with the tools
-agent_executor = create_react_agent(llm, tools, state_modifier="Ask the user questions about Memenomics.")
+agent_executor = create_react_agent(
+    llm, tools, state_modifier="Ask the user questions about Memenomics.")
+
 
 @router.get("/")
-async def ask_user_first_question():
+def ask_user_first_question():
+    val = ""
     for chunk in agent_executor.stream(
         {"messages": [HumanMessage(
             content="Ask me a question that will help me deepen my understanding of Memecoins.")]},
         {"configurable": {"thread_id": "my_first_agent"}}
     ):
         if "agent" in chunk:
-            return chunk["agent"]["messages"][0].content
+            val += chunk["agent"]["messages"][0].content
         elif "tools" in chunk:
-            return chunk["tools"]["messages"][0].content
-    return "-------------------"
+            val += chunk["tools"]["messages"][0].content
+    return val
 
 
 class QuestionModel(BaseModel):
@@ -61,17 +64,18 @@ class QuestionModel(BaseModel):
 
 
 def ask_agent(question: str):
+    val = ""
     for chunk in agent_executor.stream(
         {"messages": [HumanMessage(content=question)]},
         {"configurable": {"thread_id": "my_first_agent"}}
     ):
         if "agent" in chunk:
-            return chunk["agent"]["messages"][0].content
+            val += chunk["agent"]["messages"][0].content
         elif "tools" in chunk:
-            return chunk["tools"]["messages"][0].content
-    return "-------------------"
+            val += chunk["tools"]["messages"][0].content
+    return val
 
 
 @router.post("/")
-async def agent(request: QuestionModel):
+def agent(request: QuestionModel):
     return ask_agent(request.question)

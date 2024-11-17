@@ -74,8 +74,7 @@ export function routes() {
         console.log('TEST', "wallet data", data);
         const base64Data = Buffer.from(JSON.stringify(data)).toString('base64');
         console.log('TEST', "base64Data", base64Data);
-        // TODO: BROKEN NILLION CODE
-        // await storeSecret(uuid, "walletPrivateKey", base64Data);
+        await storeSecret(uuid, "walletPrivateKey", base64Data);
         const newUser = {
           id: uuid,
           username: username.toLowerCase(),
